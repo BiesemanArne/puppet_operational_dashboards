@@ -79,7 +79,7 @@ class puppet_operational_dashboards::profile::dashboards (
   String $telegraf_token_name = $puppet_operational_dashboards::telegraf_token_name,
   String $influxdb_token_file = $puppet_operational_dashboards::influxdb_token_file,
   Boolean $influxdb_use_system_store = true,
-  String $influxdb_api_requests_ca_bundle = Undef,
+  Optional[Stdlib::Absolutepath] $influxdb_api_requests_ca_bundle = Undef,
   Boolean $include_pe_metrics = $puppet_operational_dashboards::include_pe_metrics,
   Boolean $manage_system_board = $puppet_operational_dashboards::manage_system_board,
   Enum['v1', 'v2', 'all'] $system_dashboard_version = 'v2',
@@ -149,7 +149,7 @@ class puppet_operational_dashboards::profile::dashboards (
       }
     }
     else {
-      if defined($influxdb_api_requests_ca_bundle) {
+      if $influxdb_api_requests_ca_bundle {
         $token_vars = {
           name     => $grafana_datasource,
           token    => Sensitive(Deferred('influxdb::retrieve_token', [$influxdb_uri, $telegraf_token_name, $influxdb_token_file, $influxdb_use_system_store, $influxdb_api_requests_ca_bundle])),

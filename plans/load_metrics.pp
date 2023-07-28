@@ -45,7 +45,7 @@ plan puppet_operational_dashboards::load_metrics (
   String $telegraf_token = 'puppet telegraf token',
   String $token_file = '/root/.influxdb_token',
   Boolean $influxdb_use_system_store = true,
-  String $influxdb_api_requests_ca_bundle = Undef,
+  Optional[Stdlib::Absolutepath] $influxdb_api_requests_ca_bundle = Undef,
   String $conf_dir = '/tmp/telegraf',
   # 40 day default for bucket retention
   Array[Hash] $retention_rules = [{
