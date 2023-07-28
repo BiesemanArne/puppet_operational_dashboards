@@ -47,7 +47,7 @@
 # @param influxdb_use_system_store
 #   Whether or not to use the default system CA store for sending API requests to InfluxDB.  Defaults to 'true'
 # @param influxdb_api_requests_ca_bundle
-#   CA bundle to use when sending API requests to InfluxDB API.  Defaults to an empty String
+#   CA bundle to use when sending API requests to InfluxDB API.  Defaults to Undef
 # @param provisioning_datasource_file
 #   Location on disk to store datasource definition
 # @param include_pe_metrics
@@ -151,13 +151,7 @@ class puppet_operational_dashboards::profile::dashboards (
     else {
       $token_vars = {
         name     => $grafana_datasource,
-        token => Sensitive(Deferred('influxdb::retrieve_token', [
-          'uri'              => $influxdb_uri,
-          'token_name'       => $telegraf_token_name,
-          'admin_token_file' => $influxdb_token_file,
-          'use_system_store' => $influxdb_use_system_store,
-          'ca_bundle'        => $influxdb_api_requests_ca_bundle
-        ])),
+        token => Sensitive(Deferred('influxdb::retrieve_token', [$influxdb_uri, $telegraf_token_name, $influxdb_token_file, $influxdb_use_system_store, $influxdb_api_requests_ca_bundle])),
         database => $influxdb_bucket,
         url      => $influxdb_uri,
       }

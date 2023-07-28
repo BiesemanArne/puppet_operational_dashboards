@@ -31,7 +31,7 @@
 # @param influxdb_use_system_store
 #   Whether or not to use the default system CA store for sending API requests to InfluxDB.  Defaults to 'true'
 # @param influxdb_api_requests_ca_bundle
-#   CA bundle to use when sending API requests to InfluxDB API.  Defaults to an empty String
+#   CA bundle to use when sending API requests to InfluxDB API.  Defaults to Undef
 # @param conf_dir
 #   Directory to upload Telegraf configuration files to
 plan puppet_operational_dashboards::load_metrics (
@@ -78,13 +78,7 @@ plan puppet_operational_dashboards::load_metrics (
   apply ($target) {
     $token_vars = {
       name     => $grafana_datasource,
-      token    => Sensitive(Deferred('influxdb::retrieve_token', [
-        'uri'              => "http://${target}:8086",
-        'token_name'       => $telegraf_token,
-        'admin_token_file' => $token_file,
-        'use_system_store' => $influxdb_use_system_store,
-        'ca_bundle'        => $influxdb_api_requests_ca_bundle
-      ])),
+      token    => Sensitive(Deferred('influxdb::retrieve_token', ["http://${target}:8086", $telegraf_token, $token_file, $influxdb_use_system_store, $influxdb_api_requests_ca_bundle])),
       database => $influxdb_bucket,
       url      => "http://${target}:8086",
     }
