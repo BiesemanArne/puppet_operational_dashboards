@@ -258,14 +258,8 @@ class puppet_operational_dashboards::telegraf::agent (
     }
   }
   else {
-    if defined($influxdb_api_requests_ca_bundle) {
-      $token_vars = {
-        token => Sensitive(Deferred('influxdb::retrieve_token', [$influxdb_uri, $telegraf_token_name, $influxdb_token_file, $influxdb_use_system_store, $influxdb_api_requests_ca_bundle])),
-      }
-    } else {
-      $token_vars = {
-        token => Sensitive(Deferred('influxdb::retrieve_token', [$influxdb_uri, $telegraf_token_name, $influxdb_token_file, $influxdb_use_system_store])),
-      }
+    $token_vars = {
+      token => Sensitive(Deferred('influxdb::retrieve_token', [$influxdb_uri, $telegraf_token_name, $influxdb_token_file, $influxdb_use_system_store, $influxdb_api_requests_ca_bundle])),
     }
     file { '/etc/systemd/system/telegraf.service.d/override.conf':
       ensure  => file,
