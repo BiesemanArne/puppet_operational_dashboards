@@ -77,11 +77,6 @@
 # @param influxdb_token_file
 #   Location on disk of an InfluxDB admin token.
 #   This token is used in this class in a Deferred function call to retrieve a Telegraf token if $token is unset
-# @param influxdb_use_system_store
-#   Whether or not to use the default system CA store for sending API requests to InfluxDB.  Defaults to 'true'
-# TODO
-# @param influxdb_api_requests_ca_bundle
-#   CA bundle to use when sending API requests to InfluxDB API.  Defaults to Undef
 # @param http_timeout_seconds
 #   Timeout for HTTP Telegraf inputs. Might be usefull in huge environments with slower API responses
 # @param include_pe_metrics
@@ -96,7 +91,6 @@ class puppet_operational_dashboards::telegraf::agent (
   Integer $influxdb_port = $puppet_operational_dashboards::influxdb_port,
   String $influxdb_bucket = $puppet_operational_dashboards::initial_bucket,
   String $influxdb_org = $puppet_operational_dashboards::initial_org,
-  Boolean $influxdb_use_system_store = true,
   Boolean $use_ssl = $puppet_operational_dashboards::use_ssl,
   Boolean $manage_ssl = true,
   Boolean $insecure_skip_verify = true,
@@ -259,7 +253,7 @@ class puppet_operational_dashboards::telegraf::agent (
   }
   else {
     $token_vars = {
-      token => Sensitive(Deferred('influxdb::retrieve_token', [$influxdb_uri, $telegraf_token_name, $influxdb_token_file, true])),
+      token => Sensitive(Deferred('influxdb::retrieve_token', [$influxdb_uri, $token_name, $influxdb_token_file, true])),
     }
     file { '/etc/systemd/system/telegraf.service.d/override.conf':
       ensure  => file,
