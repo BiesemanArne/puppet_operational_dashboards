@@ -149,7 +149,7 @@ class puppet_operational_dashboards::profile::dashboards (
       }
     }
     else {
-      if $influxdb_api_requests_ca_bundle {
+      if defined($influxdb_api_requests_ca_bundle) {
         $token_vars = {
           name     => $grafana_datasource,
           token    => Sensitive(Deferred('influxdb::retrieve_token', [$influxdb_uri, $telegraf_token_name, $influxdb_token_file, $influxdb_use_system_store, $influxdb_api_requests_ca_bundle])),

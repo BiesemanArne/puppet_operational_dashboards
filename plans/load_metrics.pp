@@ -76,7 +76,7 @@ plan puppet_operational_dashboards::load_metrics (
   $target.apply_prep
 
   apply ($target) {
-    if $influxdb_api_requests_ca_bundle {
+    if defined($influxdb_api_requests_ca_bundle) {
       $token_vars = {
         name     => $grafana_datasource,
         token    => Sensitive(Deferred('influxdb::retrieve_token', ["http://${target}:8086", $telegraf_token, $token_file, $influxdb_use_system_store, $influxdb_api_requests_ca_bundle])),
@@ -119,7 +119,7 @@ plan puppet_operational_dashboards::load_metrics (
       notify  => Service['grafana-server'],
     }
 
-    if $influxdb_api_requests_ca_bundle {
+    if defined($influxdb_api_requests_ca_bundle) {
       $telegraf_vars = {
         bucket => $influxdb_bucket,
         org => $influxdb_org,
