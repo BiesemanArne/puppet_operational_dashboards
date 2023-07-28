@@ -78,7 +78,7 @@ plan puppet_operational_dashboards::load_metrics (
   apply ($target) {
     $token_vars = {
       name     => $grafana_datasource,
-      token    => Sensitive(Deferred('influxdb::retrieve_token', ["http://${target}:8086", $telegraf_token, $token_file, $influxdb_use_system_store])),
+      token    => Sensitive(Deferred('influxdb::retrieve_token', ["http://${target}:8086", $telegraf_token, $token_file, true])),
       database => $influxdb_bucket,
       url      => "http://${target}:8086",
     }
@@ -115,7 +115,7 @@ plan puppet_operational_dashboards::load_metrics (
       org => $influxdb_org,
       port => $influxdb_port,
       host => $target,
-      token => Sensitive(Deferred('influxdb::retrieve_token', ["http://${target}:8086", $telegraf_token, $token_file, $influxdb_use_system_store])),
+      token => Sensitive(Deferred('influxdb::retrieve_token', ["http://${target}:8086", $telegraf_token, $token_file, true])),
     }
     file { $conf_dir:
       ensure => directory,
