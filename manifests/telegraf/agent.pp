@@ -96,7 +96,7 @@ class puppet_operational_dashboards::telegraf::agent (
   String $influxdb_bucket = $puppet_operational_dashboards::initial_bucket,
   String $influxdb_org = $puppet_operational_dashboards::initial_org,
   Boolean $influxdb_use_system_store = true,
-  Optional[Stdlib::Absolutepath] $influxdb_api_requests_ca_bundle = Undef,
+  Optional[Stdlib::Absolutepath] $influxdb_api_requests_ca_bundle,
   Boolean $use_ssl = $puppet_operational_dashboards::use_ssl,
   Boolean $manage_ssl = true,
   Boolean $insecure_skip_verify = true,
