@@ -258,7 +258,7 @@ class puppet_operational_dashboards::telegraf::agent (
     }
   }
   else {
-    if $influxdb_api_requests_ca_bundle {
+    if defined($influxdb_api_requests_ca_bundle) {
       $token_vars = {
         token => Sensitive(Deferred('influxdb::retrieve_token', [$influxdb_uri, $telegraf_token_name, $influxdb_token_file, $influxdb_use_system_store, $influxdb_api_requests_ca_bundle])),
       }
