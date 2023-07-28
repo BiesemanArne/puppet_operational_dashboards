@@ -145,7 +145,7 @@ class puppet_operational_dashboards::profile::dashboards (
     else {
       $token_vars = {
         name     => $grafana_datasource,
-        token => Sensitive(Deferred('influxdb::retrieve_token', [$influxdb_uri, $telegraf_token_name, $influxdb_token_file])),
+        token => Sensitive(Deferred('influxdb::retrieve_token', [$influxdb_uri, $telegraf_token_name, $influxdb_token_file, true])),
         database => $influxdb_bucket,
         url      => $influxdb_uri,
       }
