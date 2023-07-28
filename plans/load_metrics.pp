@@ -28,6 +28,10 @@
 #   Location on disk of an InfluxDB admin token.
 #   This file is written to by the influxdb class during installation and read by the type and providers,
 #   as well Deferred functions in this module.
+# @param influxdb_use_system_store
+#   Whether or not to use the default system CA store for sending API requests to InfluxDB.  Defaults to 'true'
+# @param influxdb_api_requests_ca_bundle
+#   CA bundle to use when sending API requests to InfluxDB API.  Defaults to an empty String
 # @param conf_dir
 #   Directory to upload Telegraf configuration files to
 plan puppet_operational_dashboards::load_metrics (
@@ -40,6 +44,8 @@ plan puppet_operational_dashboards::load_metrics (
   String $grafana_datasource = $influxdb_bucket,
   String $telegraf_token = 'puppet telegraf token',
   String $token_file = '/root/.influxdb_token',
+  Boolean $influxdb_use_system_store = true,
+  String $influxdb_api_requests_ca_bundle = '',
   String $conf_dir = '/tmp/telegraf',
   # 40 day default for bucket retention
   Array[Hash] $retention_rules = [{
@@ -72,7 +78,7 @@ plan puppet_operational_dashboards::load_metrics (
   apply ($target) {
     $token_vars = {
       name     => $grafana_datasource,
-      token    => Sensitive(Deferred('influxdb::retrieve_token', ["http://${target}:8086", $telegraf_token, $token_file, true])),
+      token    => Sensitive(Deferred('influxdb::retrieve_token', ["http://${target}:8086", $telegraf_token, $token_file, $influxdb_use_system_store, $influxdb_api_requests_ca_bundle])),
       database => $influxdb_bucket,
       url      => "http://${target}:8086",
     }
