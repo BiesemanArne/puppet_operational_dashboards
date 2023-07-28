@@ -30,6 +30,7 @@
 #   as well Deferred functions in this module.
 # @param influxdb_use_system_store
 #   Whether or not to use the default system CA store for sending API requests to InfluxDB.  Defaults to 'true'
+# TODO
 # @param influxdb_api_requests_ca_bundle
 #   CA bundle to use when sending API requests to InfluxDB API.  Defaults to Undef
 # @param conf_dir
@@ -45,7 +46,6 @@ plan puppet_operational_dashboards::load_metrics (
   String $telegraf_token = 'puppet telegraf token',
   String $token_file = '/root/.influxdb_token',
   Boolean $influxdb_use_system_store = true,
-  Optional[Stdlib::Absolutepath] $influxdb_api_requests_ca_bundle = Undef,
   String $conf_dir = '/tmp/telegraf',
   # 40 day default for bucket retention
   Array[Hash] $retention_rules = [{
@@ -115,7 +115,7 @@ plan puppet_operational_dashboards::load_metrics (
       org => $influxdb_org,
       port => $influxdb_port,
       host => $target,
-      token => Sensitive(Deferred('influxdb::retrieve_token', ["http://${target}:8086", $telegraf_token, $token_file, $influxdb_use_system_store, $influxdb_api_requests_ca_bundle])),
+      token => Sensitive(Deferred('influxdb::retrieve_token', ["http://${target}:8086", $telegraf_token, $token_file, $influxdb_use_system_store])),
     }
     file { $conf_dir:
       ensure => directory,
